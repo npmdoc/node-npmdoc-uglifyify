@@ -1,0 +1,191 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+    >uglifyify (v3.0.4)</a>
+</h1>
+<h4>A browserify transform which minifies your code using UglifyJS2</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.uglifyify">module uglifyify</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.uglifyify.uglifyify">
+            function <span class="apidocSignatureSpan"></span>uglifyify
+            <span class="apidocSignatureSpan">(file, opts)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.uglifyify" id="apidoc.module.uglifyify">module uglifyify</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.uglifyify.uglifyify" id="apidoc.element.uglifyify.uglifyify">
+        function <span class="apidocSignatureSpan"></span>uglifyify
+        <span class="apidocSignatureSpan">(file, opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function uglifyify(file, opts) {
+  opts = opts || {}
+
+  var debug = &#x27;_flags&#x27; in opts
+    ? opts._flags.debug
+    : true
+
+  delete opts._flags
+
+  if (ignore(file, opts.ignore)) {
+    return through()
+  }
+
+  var buffer = &#x27;&#x27;
+  var exts = []
+    .concat(opts.exts || [])
+    .concat(opts.x || [])
+    .map(function(d) {
+      if (d.charAt(0) === &#x27;.&#x27;) return d
+      return &#x27;.&#x27; + d
+    })
+
+  if (
+    /\.json$/.test(file) ||
+    exts.length &#x26;&#x26;
+    exts.indexOf(path.extname(file)) === -1
+  ) {
+    return through()
+  }
+
+  return through(function write(chunk) {
+    buffer += chunk
+  }, capture(function ready() {
+    var matched = buffer.match(
+      // match an inlined sourcemap with or without a charset definition
+      /\/\/[#@] ?sourceMappingURL=data:application\/json(?:;charset=utf-8)?;base64,([a-zA-Z0-9+\/]+)={0,2}\n?$/
+    )
+
+    debug = opts.sourcemap !== false &#x26;&#x26; (debug || matched)
+    opts  = extend({}, {
+      fromString: true
+      , compress: true
+      , mangle: true
+      , filename: file
+      , sourceMaps: debug
+    }, opts)
+
+    if (typeof opts.compress === &#x27;object&#x27;) {
+      delete opts.compress._
+    }
+
+    if (debug) opts.outSourceMap = &#x27;out.js.map&#x27;
+
+    // Check if incoming source code already has source map comment.
+    // If so, send it in to ujs.minify as the inSourceMap parameter
+    if (debug &#x26;&#x26; matched) {
+      opts.inSourceMap = convert.fromJSON(
+        new Buffer(matched[1], &#x27;base64&#x27;).toString()
+      ).sourcemap
+    }
+
+    var min = ujs.minify(buffer, opts)
+
+    // Uglify leaves a source map comment pointing back to &#x22;out.js.map&#x22;,
+    // which we want to get rid of because it confuses browserify.
+    min.code = min.code.replace(/\/\/[#@] ?sourceMappingURL=out.js.map$/, &#x27;&#x27;)
+    this.queue(min.code)
+
+    if (min.map &#x26;&#x26; min.map !== &#x27;null&#x27;) {
+      var map = convert.fromJSON(min.map)
+
+      map.setProperty(&#x27;sources&#x27;, [path.basename(file)])
+      map.setProperty(&#x27;sourcesContent&#x27;, matched
+        ? opts.inSourceMap.sourcesContent
+        : [buffer]
+      )
+
+      this.queue(&#x27;\n&#x27;)
+      this.queue(map.toComment())
+    }
+
+    this.queue(null)
+  }))
+
+  function capture(fn) {
+    return function() {
+      try {
+        fn.apply(this, arguments)
+      } catch(err) {
+        return this.emit(&#x27;error&#x27;, err)
+      }
+    }
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
