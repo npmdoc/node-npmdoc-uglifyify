@@ -1,6 +1,6 @@
 # npmdoc-uglifyify
 
-#### api documentation for  uglifyify (v3.0.4)  [![npm package](https://img.shields.io/npm/v/npmdoc-uglifyify.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-uglifyify) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-uglifyify.svg)](https://travis-ci.org/npmdoc/node-npmdoc-uglifyify)
+#### basic api documentation for  [uglifyify (v3.0.4)](https://github.com/hughsk/uglifyify#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-uglifyify.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-uglifyify) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-uglifyify.svg)](https://travis-ci.org/npmdoc/node-npmdoc-uglifyify)
 
 #### A browserify transform which minifies your code using UglifyJS2
 
@@ -21,10 +21,13 @@
 ```json
 
 {
-    "name": "uglifyify",
-    "version": "3.0.4",
-    "description": "A browserify transform which minifies your code using UglifyJS2",
-    "main": "index.js",
+    "author": {
+        "name": "Hugh Kennedy",
+        "url": "http://hughskennedy.com/"
+    },
+    "bugs": {
+        "url": "https://github.com/hughsk/uglifyify/issues"
+    },
     "dependencies": {
         "convert-source-map": "~1.1.0",
         "extend": "^1.2.1",
@@ -32,6 +35,7 @@
         "through": "~2.3.4",
         "uglify-js": "2.x.x"
     },
+    "description": "A browserify transform which minifies your code using UglifyJS2",
     "devDependencies": {
         "bl": "^0.9.3",
         "browserify": "^8.1.1",
@@ -40,13 +44,13 @@
         "tape": "^3.2.0",
         "wrap-stream": "^2.0.0"
     },
-    "scripts": {
-        "test": "node test | tap-spec"
+    "directories": {},
+    "dist": {
+        "shasum": "487e080a5a7798880e68e90def9b06681fb13bd2",
+        "tarball": "https://registry.npmjs.org/uglifyify/-/uglifyify-3.0.4.tgz"
     },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/hughsk/uglifyify.git"
-    },
+    "gitHead": "d609efe54eff59fc0363705f40bd20a81262affa",
+    "homepage": "https://github.com/hughsk/uglifyify#readme",
     "keywords": [
         "uglify",
         "minify",
@@ -56,9 +60,30 @@
         "transform",
         "stream"
     ],
-    "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughskennedy.com/)",
     "license": "MIT",
-    "readmeFilename": "README.md"
+    "main": "index.js",
+    "maintainers": [
+        {
+            "name": "hughsk"
+        },
+        {
+            "name": "weilu"
+        },
+        {
+            "name": "yoshuawuyts"
+        }
+    ],
+    "name": "uglifyify",
+    "optionalDependencies": {},
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/hughsk/uglifyify.git"
+    },
+    "scripts": {
+        "test": "node test | tap-spec"
+    },
+    "version": "3.0.4",
+    "bin": {}
 }
 ```
 
